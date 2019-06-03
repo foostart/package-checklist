@@ -71,8 +71,10 @@ View::composer([
     $orders = [
         '' => trans($plang_admin . '.form.no-selected'),
         'id' => trans($plang_admin . '.fields.id'),
-        'checklist_name' => trans($plang_admin . '.fields.name'),
-        'checklist_status' => trans($plang_admin . '.fields.checklist-status'),
+        'task_id' => trans($plang_admin . '.fields.task_id'),
+        'task_url' => trans($plang_admin . '.fields.task_url'),
+        'task_name' => trans($plang_admin . '.fields.name'),
+        'task_status' => trans($plang_admin . '.fields.checklist-status'),
         'updated_at' => trans($plang_admin . '.fields.updated_at'),
     ];
 

@@ -36,13 +36,29 @@ Route::group(['middleware' => ['web']], function () {
         /**
          * list
          */
-         Route::get('admin/checklists', [
+        Route::get('admin/checklists', [
             'as' => 'checklists.list',
             'uses' => 'ChecklistAdminController@index'
         ]);
         Route::get('admin/checklists/list', [
             'as' => 'checklists.list',
             'uses' => 'ChecklistAdminController@index'
+        ]);
+
+        /**
+         * view
+         */
+        Route::get('admin/checklists/view', [
+            'as' => 'checklists.view',
+            'uses' => 'ChecklistAdminController@view'
+        ]);
+
+        /**
+         * view
+         */
+        Route::get('admin/checklists/download', [
+            'as' => 'checklists.download',
+            'uses' => 'ChecklistAdminController@download'
         ]);
 
         /**
@@ -77,6 +93,18 @@ Route::group(['middleware' => ['web']], function () {
             'uses' => 'ChecklistAdminController@delete'
         ]);
 
+        Route::get('admin/taskrule/delete', [
+            'as' => 'taskrule.delete',
+            'uses' => 'ChecklistAdminController@deleteTaskRule'
+        ]);
+
+        /**
+         * Checked
+         */
+        Route::get('admin/taskrule/checked', [
+            'as' => 'taskrule.checked',
+            'uses' => 'ChecklistAdminController@checked'
+        ]);
         /**
          * trash
          */

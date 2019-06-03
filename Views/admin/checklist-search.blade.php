@@ -23,7 +23,15 @@
                 'value' => @$params['keyword'],
             ])
 
-           
+            <!-- STATUS -->
+            @include('package-category::admin.partials.select_single', [
+                'name' => 'status',
+                'label' => trans($plang_admin.'.labels.status'),
+                'value' => @$params['status'],
+                'items' => $status,
+            ])
+
+
             <!--SORTING-->
             @include('package-category::admin.partials.sorting')
 

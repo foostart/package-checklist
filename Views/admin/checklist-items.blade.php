@@ -10,7 +10,7 @@
         <div class="col-md-12">
 
             <!--LIST OF ITEMS-->
-            <div class="col-md-8">
+            <div class="col-md-9">
 
                 <div class="panel panel-info">
 
@@ -46,7 +46,7 @@
 
                     <!--BODY-->
                     <div class="panel-body">
-                        {!! Form::open(['route'=>['checklists.delete', 'id' => @$item->id], 'method' => 'get'])  !!}
+                        {!! Form::open(['route'=>['checklists.delete', 'id' => @$item->id], 'method' => 'get', 'class'=>'form-responsive'])  !!}
 
                             @include('package-checklist::admin.checklist-item')
 
@@ -61,7 +61,7 @@
             <!--/LIST OF ITEMS-->
 
             <!--SEARCH-->
-            <div class="col-md-4">
+            <div class="col-md-3">
                 @include('package-checklist::admin.checklist-search')
             </div>
             <!--/SEARCH-->

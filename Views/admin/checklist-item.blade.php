@@ -2,9 +2,10 @@
 <?php
 $withs = [
     'order' => '10%',
-    'name' => '40%',
-    'updated_at' => '40%',
-    'operations' => '10%',
+    'name' => '30%',
+    'task_id' => '15%',
+    'updated_at' => '25%',
+    'operations' => '20%',
     'status' => '5%',
 ];
 
@@ -19,7 +20,7 @@ $counter = ($nav['current_page'] - 1) * $nav['per_page'] + 1;
     {!! trans($plang_admin.'.descriptions.counters', ['number' => $nav['total']]) !!}
     @endif
 </caption>
-
+<div class="table-responsive" style="width: 950px">
 <table class="table table-hover">
 
     <thead>
@@ -35,8 +36,22 @@ $counter = ($nav['current_page'] - 1) * $nav['per_page'] + 1;
             </th>
 
             <!-- NAME -->
-            <?php $name = 'checklist_name' ?>
+            <?php $name = 'task_name' ?>
             <th class="hidden-xs" style='width:{{ $withs['name'] }}'>{!! trans($plang_admin.'.columns.name') !!}
+                <a href='{!! $sorting["url"][$name] !!}' class='tb-id' data-order='asc'>
+                    @if($sorting['items'][$name] == 'asc')
+                    <i class="fa fa-sort-alpha-asc" aria-hidden="true"></i>
+                    @elseif($sorting['items'][$name] == 'desc')
+                    <i class="fa fa-sort-alpha-desc" aria-hidden="true"></i>
+                    @else
+                    <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                    @endif
+                </a>
+            </th>
+
+            <!-- TASK_ID -->
+            <?php $name = 'task_id' ?>
+            <th class="hidden-xs" style='width:{{ $withs['task_id'] }}'>{!! trans($plang_admin.'.columns.task_id') !!}
                 <a href='{!! $sorting["url"][$name] !!}' class='tb-id' data-order='asc'>
                     @if($sorting['items'][$name] == 'asc')
                     <i class="fa fa-sort-alpha-asc" aria-hidden="true"></i>
@@ -51,20 +66,6 @@ $counter = ($nav['current_page'] - 1) * $nav['per_page'] + 1;
             <!--STATUS-->
             <th style='width:{{ $withs['status'] }}'>
                 {{ trans($plang_admin.'.columns.status') }}
-            </th>
-
-            <!-- UPDATED AT -->
-            <?php $name = 'updated_at' ?>
-            <th class="hidden-xs" style='width:{{ $withs['updated_at'] }}'>{!! trans($plang_admin.'.columns.updated_at') !!}
-                <a href='{!! $sorting["url"][$name] !!}' class='tb-id' data-order='asc'>
-                    @if($sorting['items'][$name] == 'asc')
-                    <i class="fa fa-sort-alpha-asc" aria-hidden="true"></i>
-                    @elseif($sorting['items'][$name] == 'desc')
-                    <i class="fa fa-sort-alpha-desc" aria-hidden="true"></i>
-                    @else
-                    <i class="fa fa-sort-desc" aria-hidden="true"></i>
-                    @endif
-                </a>
             </th>
 
             <!--OPERATIONS-->
@@ -85,6 +86,20 @@ $counter = ($nav['current_page'] - 1) * $nav['per_page'] + 1;
                 !!}
             </th>
 
+            <!-- UPDATED AT -->
+            <?php $name = 'updated_at' ?>
+            <th class="hidden-xs" style='width:{{ $withs['updated_at'] }}'>{!! trans($plang_admin.'.columns.updated_at') !!}
+                <a href='{!! $sorting["url"][$name] !!}' class='tb-id' data-order='asc'>
+                    @if($sorting['items'][$name] == 'asc')
+                    <i class="fa fa-sort-alpha-asc" aria-hidden="true"></i>
+                    @elseif($sorting['items'][$name] == 'desc')
+                    <i class="fa fa-sort-alpha-desc" aria-hidden="true"></i>
+                    @else
+                    <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                    @endif
+                </a>
+            </th>
+
         </tr>
 
     </thead>
@@ -102,25 +117,37 @@ $counter = ($nav['current_page'] - 1) * $nav['per_page'] + 1;
             </td>
 
             <!--NAME-->
-            <td> {!! $item->checklist_name !!} </td>
+            <td> {!! $item->task_name !!} </td>
 
-             <!--STATUS-->
-                 <td style="text-align: center;">
+            <!--TASK ID-->
+            <td>
+                <a href="{!! $item->task_url  !!}">
+                    {!! $item->task_id !!}
+                </a>
+            </td>
 
-                     <?php $status = config('package-checklist.status'); ?>
-                     @if($item->checklist_status && (isset($status['list'][$item->checklist_status])))
-                         <i class="fa fa-circle" style="color:{!! $status['color'][$item->checklist_status] !!}" title='{!! $status["list"][$item->checklist_status] !!}'></i>
-                    @else
-                     <i class="fa fa-circle-o red" title='{!! trans($plang_admin.".labels.unknown") !!}'></i>
-                     @endif
-                 </td>
+            <!--STATUS-->
+            <td style="text-align: center;">
 
+                <?php $status = config('package-checklist.status'); ?>
+                @if($item->task_status && (isset($status['list'][$item->task_status])))
+                    <i class="fa fa-circle" style="color:{!! $status['color'][$item->task_status] !!}" title='{!! $status["list"][$item->task_status] !!}'></i>
+               @else
+                <i class="fa fa-circle-o red" title='{!! trans($plang_admin.".labels.unknown") !!}'></i>
+                @endif
+            </td>
 
-            <!--UPDATED AT-->
-            <td> {!! $item->updated_at !!} </td>
 
             <!--OPERATOR-->
             <td>
+                 <!--view-->
+                <a href="{!! URL::route('checklists.view', [   'id' => $item->id,
+                   '_token' => csrf_token()
+                   ])
+                   !!}">
+                   <i class="fa fa-eye" aria-hidden="true"></i>
+                </a>
+
                 <!--edit-->
                 <a href="{!! URL::route('checklists.edit', [   'id' => $item->id,
                    '_token' => csrf_token()
@@ -138,6 +165,16 @@ $counter = ($nav['current_page'] - 1) * $nav['per_page'] + 1;
                     <i class="fa fa-files-o f-tb-icon" aria-hidden="true"></i>
                 </a>
 
+
+                <!--download-->
+                <a href="{!! URL::route('checklists.download', [   'id' => $item->id,
+                   '_token' => csrf_token()
+                   ])
+                   !!}">
+                    <i class="fa fa-download" aria-hidden="true"></i>
+                </a>
+
+
                 <!--delete-->
                 <a href="{!! URL::route('checklists.delete',[  'id' => $item->id,
                    '_token' => csrf_token(),
@@ -148,6 +185,9 @@ $counter = ($nav['current_page'] - 1) * $nav['per_page'] + 1;
                 </a>
 
             </td>
+            <!--UPDATED AT-->
+            <td> {!! $item->updated_at !!} </td>
+
         </tr>
         @endforeach
 
@@ -156,6 +196,7 @@ $counter = ($nav['current_page'] - 1) * $nav['per_page'] + 1;
 </table>
 <div class="paginator">
     {!! $items->appends($request->except(['page']) )->render() !!}
+</div>
 </div>
 @else
 <!--SEARCH RESULT MESSAGE-->

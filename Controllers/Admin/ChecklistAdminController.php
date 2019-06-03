@@ -18,23 +18,33 @@ use URL,
     Redirect;
 use Illuminate\Support\Facades\App;
 use Foostart\Category\Library\Controllers\FooController;
-use Foostart\Checklist\Models\Checklist;
+use Foostart\Checklist\Models\Task;
+use Foostart\Checklist\Models\CheckedRule;
 use Foostart\Category\Models\Category;
 use Foostart\Checklist\Validators\ChecklistValidator;
 use Foostart\Checklist\Helper\PexcelParser;
 
 class ChecklistAdminController extends FooController {
 
-    public $obj_item = NULL;
+    public $obj_rules = NULL;
+    public $obj_checked_rules = NULL;
+    public $obj_rule = NULL;
+    public $obj_task = NULL;
     public $obj_category = NULL;
     public $statuses = NULL;
+
+    public $obj_item = NULL;
 
     public function __construct() {
 
         parent::__construct();
         // models
-        $this->obj_item = new Checklist(array('perPage' => 10));
+        $this->obj_rules = new Task(array('perPage' => 10));
+        $this->obj_checked_rules = new CheckedRule();
+        $this->obj_rule = new Task();
+        $this->obj_task = new Task();
         $this->obj_category = new Category();
+        $this->obj_item = new Task();
         //statuses
         $this->statuses = config('package-checklist.status.list');
         // validators
@@ -62,12 +72,18 @@ class ChecklistAdminController extends FooController {
             ]
         ];
 
-        $this->data_view['status'] = $this->obj_item->getPluckStatus();
+        $this->data_view['status'] = $this->obj_rule->getPluckStatus();
 
 
         $this->statuses = config('package-checklist.status.list');
         // //set category
         $this->category_ref_name = 'admin/checklists';
+        
+        /**
+         * Breadcrumb
+         */
+        $this->breadcrumb_1['label'] = 'Admin';
+        $this->breadcrumb_2['label'] = 'Checklist';
     }
 
     /**
@@ -76,9 +92,15 @@ class ChecklistAdminController extends FooController {
      * @date 27/12/2017
      */
     public function index(Request $request) {
+        /**
+         * Breadcrumb
+         */
+        $this->breadcrumb_3 = NULL;
+        
+        //params
+        $params = array_merge($request->all(), $this->getUser());
 
-        $params = $request->all();
-
+        //get list of items by parameters
         $items = $this->obj_item->selectItems($params);
 
         // display view
@@ -87,6 +109,9 @@ class ChecklistAdminController extends FooController {
             'request' => $request,
             'params' => $params,
             'statuses' => $this->statuses,
+            'breadcrumb_1' => $this->breadcrumb_1,
+            'breadcrumb_2' => $this->breadcrumb_2,
+            'breadcrumb_3' => $this->breadcrumb_3,
         ));
 
         return view($this->page_views['admin']['items'], $this->data_view);
@@ -99,6 +124,11 @@ class ChecklistAdminController extends FooController {
      * @date 26/12/2017
      */
     public function edit(Request $request) {
+        
+        /**
+         * Breadcrumb
+         */
+        $this->breadcrumb_3['label'] = 'Edit';
 
         $item = NULL;
         $categories = NULL;
@@ -132,6 +162,9 @@ class ChecklistAdminController extends FooController {
             'request' => $request,
             'context' => $context,
             'statuses' => $this->statuses,
+            'breadcrumb_1' => $this->breadcrumb_1,
+            'breadcrumb_2' => $this->breadcrumb_2,
+            'breadcrumb_3' => $this->breadcrumb_3,
         ));
         return view($this->page_views['admin']['edit'], $this->data_view);
     }
@@ -243,6 +276,11 @@ class ChecklistAdminController extends FooController {
      * @return view config page
      */
     public function config(Request $request) {
+        
+        /**
+         * Breadcrumb
+         */
+        $this->breadcrumb_3['label'] = 'Config';
         $is_valid_request = $this->isValidRequest($request);
         // display view
         $config_path = realpath(base_path('config/package-checklist.php'));
@@ -280,6 +318,9 @@ class ChecklistAdminController extends FooController {
             'request' => $request,
             'content' => $content,
             'backups' => $backups,
+            'breadcrumb_1' => $this->breadcrumb_1,
+            'breadcrumb_2' => $this->breadcrumb_2,
+            'breadcrumb_3' => $this->breadcrumb_3,
         ));
 
         return view($this->page_views['admin']['config'], $this->data_view);
@@ -291,6 +332,11 @@ class ChecklistAdminController extends FooController {
      * @return view lang page
      */
     public function lang(Request $request) {
+                        
+        /**
+         * Breadcrumb
+         */
+        $this->breadcrumb_3['label'] = 'Lang';
         $is_valid_request = $this->isValidRequest($request);
         // display view
         $langs = config('package-checklist.langs');
@@ -361,6 +407,9 @@ class ChecklistAdminController extends FooController {
             'langs'   => $langs,
             'lang_contents' => $lang_contents,
             'lang' => $lang,
+            'breadcrumb_1' => $this->breadcrumb_1,
+            'breadcrumb_2' => $this->breadcrumb_2,
+            'breadcrumb_3' => $this->breadcrumb_3,
         ));
 
         return view($this->page_views['admin']['lang'], $this->data_view);
@@ -373,6 +422,12 @@ class ChecklistAdminController extends FooController {
      * @date 26/12/2017
      */
     public function copy(Request $request) {
+        
+                
+        /**
+         * Breadcrumb
+         */
+        $this->breadcrumb_3['label'] = 'Copy';
 
         $params = $request->all();
 
@@ -401,6 +456,10 @@ class ChecklistAdminController extends FooController {
             'categories' => $categories,
             'request' => $request,
             'context' => $context,
+            'statuses' => $this->statuses,
+            'breadcrumb_1' => $this->breadcrumb_1,
+            'breadcrumb_2' => $this->breadcrumb_2,
+            'breadcrumb_3' => $this->breadcrumb_3,
         ));
 
         return view($this->page_views['admin']['edit'], $this->data_view);
@@ -410,29 +469,38 @@ class ChecklistAdminController extends FooController {
 
 
     /**
-     * View data file form excel
+     * Show list of checked rules
      * @param Request $request
      */
     public function view(Request $request) {
+        
+                
+        /**
+         * Breadcrumb
+         */
+        $this->breadcrumb_3['label'] = 'View';
 
-        $obj_parser = new PexcelParser();
-
-        $item = NULL;
+        $task = NULL;
         $categories = NULL;
+        $checked_rules = NULL;
 
         $params = $request->all();
-        $params['id'] = $request->get('id', NULL);
-
         $context = $this->obj_item->getContext($this->category_ref_name);
 
+        //get task info
         if (!empty($params['id'])) {
 
-            $item = $this->obj_item->selectItem($params, FALSE);
+            $task = $this->obj_task->selectItem($params, FALSE);
 
-            if (empty($item)) {
+            if (empty($task)) {
                 return Redirect::route($this->root_router . '.list')
                                 ->withMessage(trans($this->plang_admin . '.actions.edit-error'));
             }
+        }
+
+        //get checked rules by selected task
+        if (!empty($params['id'])) {
+            $checked_rules = $this->obj_checked_rules->getCheckedRules($task->task_id);
         }
 
         //get categories by context
@@ -442,27 +510,115 @@ class ChecklistAdminController extends FooController {
             $categories = $this->obj_category->pluckSelect($params);
         }
 
-        //get data from file excel
-        $items = $obj_parser->read_data($item);
-
         // display view
         $this->data_view = array_merge($this->data_view, array(
-            'items' => $items,
+            'task' => $task,
+            'checked_rules' => $checked_rules,
             'categories' => $categories,
             'request' => $request,
             'context' => $context,
             'statuses' => $this->statuses,
+            'breadcrumb_1' => $this->breadcrumb_1,
+            'breadcrumb_2' => $this->breadcrumb_2,
+            'breadcrumb_3' => $this->breadcrumb_3,
         ));
+
         return view($this->page_views['admin']['view'], $this->data_view);
     }
 
+    /**
+     * Download list of checked rules by current task
+     * @param Request $request
+     */
     public function download(Request $request){
 
+        //Pexcel parser
         $obj_parser = new PexcelParser();
-        $obj_parser->export_items();
-        var_dump(111);
-        die();
+
+         //init
+        $user = $this->getUser();
+
+        //Get checklist and taskrule
+        $task= NULL;
+        $checked_rules = NULL;
+
+
+        //Get current task by user
+        if ($user) {
+            $_params = [
+                'user_id' => $user['user_id'],
+                'status' => 99,
+            ];
+
+            $task = $this->obj_task->selectItem($_params);
+
+            if (empty($task)) {
+                return Redirect::route('home');
+            }
+        } else {
+            return Redirect::route('home');
+        }
+
+
+        //Get checked rules by current task
+        if ($user && $task) {
+            $checked_rules = $this->obj_checked_rules->getCheckedRules($task->task_id);
+
+            if (empty($checked_rules)) {
+                return Redirect::route('home');
+            }
+        }
+
+        //write to excel
+        $obj_parser->export_checklist($task, $checked_rules);
 
     }
 
+    public function deleteTaskRule(Request $request) {
+
+        $flag = TRUE;
+        $params = array_merge($request->all(), $this->getUser());
+        $delete_type = isset($params['del-forever']) ? 'delete-forever' : 'delete-forever';//delete-trash
+        $post_id = (int) $request->get('post_id');
+        $task_id = (int) $request->get('task_id');
+        $ids = $request->get('ids');
+
+        $is_valid_request = $this->isValidRequest($request);
+
+        if ($is_valid_request && (!empty($post_id) || !empty($ids))) {
+
+            $ids = !empty($post_id) ? [$post_id] : $ids;
+
+            foreach ($ids as $post_id) {
+
+                $params['post_id'] = $post_id;
+
+                if (!$this->obj_checked_rules->deleteItem($params, $delete_type)) {
+                    $flag = FALSE;
+                }
+            }
+            if ($flag) {
+                return Redirect::route($this->root_router . '.view', ["id" => $task_id])
+                                ->withMessage(trans($this->plang_admin . '.actions.delete-ok'));
+            }
+        }
+        return Redirect::route($this->root_router . '.view', ["id" => $task_id])
+                        ->withMessage(trans($this->plang_admin . '.actions.delete-error'));
+    }
+
+    public function checked(Request $request) {
+
+        $params = $request->all();
+
+        if (!empty($params['post_id']) && !empty($params['task_id'])) {
+            $this->obj_checked_rules->insertItem($params);
+
+            if ($params['callback']) {
+                return redirect($params['callback']);
+            } else {
+                 return redirect(url('/'));
+            }
+        }
+        return Redirect::route('home');
+    }
 }

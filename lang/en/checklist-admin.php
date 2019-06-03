@@ -10,7 +10,7 @@ return [
     |
     */
     'menus' => [
-        'top-menu' => 'Pexcels'
+        'top-menu' => 'Tasks'
     ],
 
 
@@ -47,7 +47,7 @@ return [
     |
     */
     'columns' => [
-        'name' => 'Pexcel name',
+        'name' => 'Task name',
         'operations' => 'Operations',
         'updated_at' => 'Updated at',
         'filename' => 'File name',
@@ -60,6 +60,10 @@ return [
         'status' => 'Status',
         '#' => '#',
         'url' => 'Url',
+        'task_id' => 'Redmine ID',
+        'task_url' => 'Redmine URL',
+        'rule_name' => 'Rule name',
+        'operations' => 'Operations',
     ],
 
 
@@ -71,11 +75,11 @@ return [
     |
     */
     'pages' => [
-        'title-list' => 'List of pexcels',
+        'title-list' => 'List of checklists',
         'title-list-search' => 'Search results',
-        'title-edit' => 'Edit pexcel',
-        'title-add' => 'Add new pexcel',
-        'title-delete' => 'Delete pexcel',
+        'title-edit' => 'Edit checklist',
+        'title-add' => 'Add new checklist',
+        'title-delete' => 'Delete checklist',
         'title-config' => 'Current configurations',
         'title-lang' => 'Manage list of languages',
     ],
@@ -132,8 +136,8 @@ return [
     |
     */
     'descriptions' => [
-        'form' => 'Pexcel form',
-        'update' => 'Update pexcel',
+        'form' => 'Checklist form',
+        'update' => 'Update checklist',
         'name' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
         'category' => 'Click <a href=":href">here</a> to manage list of categories by token.',
         'overview' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
@@ -146,7 +150,9 @@ return [
         'not-found' => 'Not found items',
         'config' => 'List of configurations',
         'lang' => 'List of languages',
-        'pexcel-status' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
+        'checklist-status' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
+        'task_id' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
+        'task_url' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
     ],
 
 
@@ -179,13 +185,16 @@ return [
     |
     */
     'fields' => [
-        'id' => 'Pexcel ID',
-        'name' => 'Pexcel name',
-        'description' => 'Pexcel Description',
-        'overview' => 'Pexcel Overview',
+        'id' => 'Checklist ID',
+        'name' => 'Task name',
+        'description' => 'Task Description',
+        'overview' => 'Task Overview',
         'slug' => 'Slug',
         'updated_at' => 'Updated at',
-        'pexcel-status' => 'Status',
+        'checklist-status' => 'Status',
+        'task_id' => 'Redmine ID',
+        'task_url' => 'Redmine URL',
+        'status' => 'Status',
     ],
 
 
@@ -201,16 +210,20 @@ return [
     |
     */
     'labels' => [
-        'name' => 'Pexcel name',
-        'overview' => 'Pexcel overview',
-        'description' => 'Pexcel description',
-        'image' => 'Pexcel image',
-        'files' => 'Pexcel files',
+        'name' => 'Task name',
+        'overview' => 'Task overview',
+        'description' => 'Task description',
+        'image' => 'Task image',
+        'files' => 'Task files',
         'category' => 'Category name',
-        'title-search' => 'Search pexcel',
+        'title-search' => 'Search checklist',
         'title-backup' => 'Backups',
         'config' => 'Configurations',
-        'pexcel-status' => 'Status',
+        'checklist-status' => 'Status',
+        'task_id' => 'Redmine ID',
+        'task_url' => 'Redmine URL',
+        'status' => 'Status',
+
     ],
 
 
@@ -257,8 +270,8 @@ return [
     |
     */
     'headings' => [
-        'form-search' => 'Search pexcels',
-        'list' => 'List of pexcels',
+        'form-search' => 'Search checklists',
+        'list' => 'List of checklists',
         'search' => 'Search results',
     ],
 

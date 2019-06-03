@@ -3,15 +3,15 @@ return [
 
     //Number of worlds
     'length' => [
-        'checklist_name' => [
+        'task_name' => [
             'min' => 3,
             'max' => 255,
         ],
-        'checklist_overview' => [
+        'task_overview' => [
             'min' => 10,
             'max' => 255,
         ],
-        'checklist_description' => [
+        'task_description' => [
             'min' => 25,
             'max' => 0,//unlimit
         ],
@@ -33,7 +33,7 @@ return [
 
 
 
-    
+
     /*
     |--------------------------------------------------------------------------
     | ITEM STATUS

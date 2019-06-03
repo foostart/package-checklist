@@ -3,7 +3,7 @@
 use Foostart\Category\Library\Validators\FooValidator;
 use Event;
 use \LaravelAcl\Library\Validators\AbstractValidator;
-use Foostart\Checklist\Models\Checklist;
+use Foostart\Checklist\Models\Task;
 
 use Illuminate\Support\MessageBag as MessageBag;
 
@@ -16,16 +16,16 @@ class ChecklistValidator extends FooValidator
     {
         // add rules
         self::$rules = [
-            'checklist_name' => ["required"],
-            'checklist_overview' => ["required"],
-            'checklist_description' => ["required"],
+            'task_name' => ["required"],
+            'task_overview' => ["required"],
+            'task_description' => ["required"],
         ];
 
         // set configs
         self::$configs = $this->loadConfigs();
 
         // model
-        $this->obj_checklist = new checklist();
+        $this->obj_checklist = new Task();
 
         // language
         $this->lang_front = 'checklist-front';
@@ -35,9 +35,9 @@ class ChecklistValidator extends FooValidator
         Event::listen('validating', function($input)
         {
             self::$messages = [
-                'checklist_name.required'          => trans($this->lang_admin.'.errors.required', ['attribute' => trans($this->lang_admin.'.fields.name')]),
-                'checklist_overview.required'      => trans($this->lang_admin.'.errors.required', ['attribute' => trans($this->lang_admin.'.fields.overview')]),
-                'checklist_description.required'   => trans($this->lang_admin.'.errors.required', ['attribute' => trans($this->lang_admin.'.fields.description')]),
+                'task_name.required'          => trans($this->lang_admin.'.errors.required', ['attribute' => trans($this->lang_admin.'.fields.name')]),
+                'task_overview.required'      => trans($this->lang_admin.'.errors.required', ['attribute' => trans($this->lang_admin.'.fields.overview')]),
+                'task_description.required'   => trans($this->lang_admin.'.errors.required', ['attribute' => trans($this->lang_admin.'.fields.description')]),
             ];
         });
 
@@ -59,28 +59,28 @@ class ChecklistValidator extends FooValidator
 
         $params = [
             'name' => [
-                'key' => 'checklist_name',
+                'key' => 'task_name',
                 'label' => trans($this->lang_admin.'.fields.name'),
-                'min' => $_ln['checklist_name']['min'],
-                'max' => $_ln['checklist_name']['max'],
+                'min' => $_ln['task_name']['min'],
+                'max' => $_ln['task_name']['max'],
             ],
             'overview' => [
-                'key' => 'checklist_overview',
+                'key' => 'task_overview',
                 'label' => trans($this->lang_admin.'.fields.overview'),
-                'min' => $_ln['checklist_overview']['min'],
-                'max' => $_ln['checklist_overview']['max'],
+                'min' => $_ln['task_overview']['min'],
+                'max' => $_ln['task_overview']['max'],
             ],
             'description' => [
-                'key' => 'checklist_description',
+                'key' => 'task_description',
                 'label' => trans($this->lang_admin.'.fields.description'),
-                'min' => $_ln['checklist_description']['min'],
-                'max' => $_ln['checklist_description']['max'],
+                'min' => $_ln['task_description']['min'],
+                'max' => $_ln['task_description']['max'],
             ],
         ];
 
-        $flag = $this->isValidLength($input['checklist_name'], $params['name']) ? $flag : FALSE;
-        $flag = $this->isValidLength($input['checklist_overview'], $params['overview']) ? $flag : FALSE;
-        $flag = $this->isValidLength($input['checklist_description'], $params['description']) ? $flag : FALSE;
+        $flag = $this->isValidLength($input['task_name'], $params['name']) ? $flag : FALSE;
+        $flag = $this->isValidLength($input['task_overview'], $params['overview']) ? $flag : FALSE;
+        $flag = $this->isValidLength($input['task_description'], $params['description']) ? $flag : FALSE;
 
         return $flag;
     }
