@@ -95,7 +95,7 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('admin/taskrule/delete', [
             'as' => 'taskrule.delete',
-            'uses' => 'ChecklistAdminController@deleteTaskRule'
+            'uses' => 'ChecklistAdminController@deleteCheckRule'
         ]);
 
         /**

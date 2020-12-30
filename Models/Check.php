@@ -5,7 +5,7 @@ namespace Foostart\Checklist\Models;
 use Foostart\Category\Library\Models\FooModel;
 use Illuminate\Database\Eloquent\Model;
 
-class Task extends FooModel {
+class Check extends FooModel {
 
     /**
      * @table categories
@@ -21,26 +21,26 @@ class Task extends FooModel {
     public function setConfigs() {
 
         //table name
-        $this->table = 'tasks';
+        $this->table = 'checks';
 
         //list of field in table
         $this->fillable = [
-            'task_name',
+            'check_name',
             'category_id',
             'user_id',
             'redmine_id',
             'redmine_url',
-            'task_overview',
-            'task_description',
-            'task_image',
-            'task_files',
-            'task_status',
+            'check_overview',
+            'check_description',
+            'check_image',
+            'check_files',
+            'check_status',
         ];
 
         //list of fields for inserting
         $this->fields = [
-            'task_name' => [
-                'name' => 'task_name',
+            'check_name' => [
+                'name' => 'check_name',
                 'type' => 'Text',
             ],
             'category_id' => [
@@ -59,25 +59,25 @@ class Task extends FooModel {
                 'name' => 'redmine_url',
                 'type' => 'Text',
             ],
-            'task_overview' => [
-                'name' => 'task_overview',
+            'check_overview' => [
+                'name' => 'check_overview',
                 'type' => 'Text',
             ],
-            'task_description' => [
-                'name' => 'task_description',
+            'check_description' => [
+                'name' => 'check_description',
                 'type' => 'Text',
             ],
-            'task_image' => [
-                'name' => 'task_image',
+            'check_image' => [
+                'name' => 'check_image',
                 'type' => 'Text',
             ],
-            'task_files' => [
+            'check_files' => [
                 'name' => 'files',
                 'type' => 'Json',
             ],
 
-            'task_status' => [
-                 'name' => 'task_status',
+            'check_status' => [
+                 'name' => 'check_status',
                  'type' => 'Int',
             ],
 
@@ -85,24 +85,24 @@ class Task extends FooModel {
 
         //check valid fields for inserting
         $this->valid_insert_fields = [
-            'task_name',
+            'check_name',
             'user_id',
             'category_id',
             'redmine_id',
             'redmine_url',
             'updated_at',
-            'task_overview',
-            'task_description',
-            'task_image',
-            'task_files',
-            'task_status',
+            'check_overview',
+            'check_description',
+            'check_image',
+            'check_files',
+            'check_status',
         ];
 
         //check valid fields for ordering
         $this->valid_ordering_fields = [
             'redmine_id',
             'redmine_url',
-            'task_name',
+            'check_name',
             'updated_at',
             $this->field_status,
         ];
@@ -111,17 +111,17 @@ class Task extends FooModel {
             'keyword',
             'status',
             'user_id',
-            'task_status',
+            'check_status',
         ];
 
         //primary key
-        $this->primaryKey = 'task_id';
+        $this->primaryKey = 'check_id';
 
         //the number of items on page
         $this->perPage = 10;
 
         //item status
-        $this->field_status = 'task_status';
+        $this->field_status = 'check_status';
     }
 
     /**
@@ -201,9 +201,9 @@ class Task extends FooModel {
             foreach ($params as $column => $value) {
                 if ($this->isValidValue($value)) {
                     switch ($column) {
-                        case 'task_name':
+                        case 'check_name':
                             if (!empty($value)) {
-                                $elo = $elo->where($this->table . '.task_name', '=', $value);
+                                $elo = $elo->where($this->table . '.check_name', '=', $value);
                             }
                             break;
                         case 'status':
@@ -219,9 +219,9 @@ class Task extends FooModel {
                         case 'keyword':
                             if (!empty($value)) {
                                 $elo = $elo->where(function($elo) use ($value) {
-                                    $elo->where($this->table . '.task_name', 'LIKE', "%{$value}%")
-                                            ->orWhere($this->table . '.task_description', 'LIKE', "%{$value}%")
-                                            ->orWhere($this->table . '.task_overview', 'LIKE', "%{$value}%");
+                                    $elo->where($this->table . '.check_name', 'LIKE', "%{$value}%")
+                                            ->orWhere($this->table . '.check_description', 'LIKE', "%{$value}%")
+                                            ->orWhere($this->table . '.check_overview', 'LIKE', "%{$value}%");
                                 });
                             }
                             break;
@@ -242,7 +242,7 @@ class Task extends FooModel {
      */
     public function createSelect($elo) {
 
-        $elo = $elo->select($this->table . '.*', $this->table . '.task_id as id'
+        $elo = $elo->select($this->table . '.*', $this->table . '.check_id as id'
         );
 
         return $elo;
@@ -346,13 +346,13 @@ class Task extends FooModel {
      }
 
 
-     public function getCheckedRules($task_id) {
+     public function getChecklists($check_id) {
          $checked_rules = NULL;
 
          $checked_rules = self::from('checked_rules')
                                 ->select('posts.*')
                                 ->join('posts','posts.post_id', '=', 'checked_rules.post_id')
-                                ->where('task_id','=', $task_id)
+                                ->where('check_id','=', $check_id)
                                 ->get();
          return $checked_rules;
      }

@@ -3,7 +3,7 @@
 use Foostart\Category\Library\Validators\FooValidator;
 use Event;
 use \LaravelAcl\Library\Validators\AbstractValidator;
-use Foostart\Checklist\Models\Task;
+use Foostart\Checklist\Models\Check;
 
 use Illuminate\Support\MessageBag as MessageBag;
 
@@ -25,7 +25,7 @@ class ChecklistValidator extends FooValidator
         self::$configs = $this->loadConfigs();
 
         // model
-        $this->obj_checklist = new Task();
+        $this->obj_checklist = new Check();
 
         // language
         $this->lang_front = 'checklist-front';

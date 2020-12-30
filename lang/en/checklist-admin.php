@@ -10,7 +10,7 @@ return [
     |
     */
     'menus' => [
-        'top-menu' => 'Tasks'
+        'top-menu' => 'Check'
     ],
 
 
@@ -47,7 +47,7 @@ return [
     |
     */
     'columns' => [
-        'name' => 'Task name',
+        'name' => 'Check name',
         'operations' => 'Operations',
         'updated_at' => 'Updated at',
         'filename' => 'File name',
@@ -186,9 +186,9 @@ return [
     */
     'fields' => [
         'id' => 'Checklist ID',
-        'name' => 'Task name',
-        'description' => 'Task Description',
-        'overview' => 'Task Overview',
+        'name' => 'Check name',
+        'description' => 'Check Description',
+        'overview' => 'Check Overview',
         'slug' => 'Slug',
         'updated_at' => 'Updated at',
         'checklist-status' => 'Status',
@@ -210,11 +210,11 @@ return [
     |
     */
     'labels' => [
-        'name' => 'Task name',
-        'overview' => 'Task overview',
-        'description' => 'Task description',
-        'image' => 'Task image',
-        'files' => 'Task files',
+        'name' => 'Check name',
+        'overview' => 'Check overview',
+        'description' => 'Check description',
+        'image' => 'Check image',
+        'files' => 'Check files',
         'category' => 'Category name',
         'title-search' => 'Search checklist',
         'title-backup' => 'Backups',

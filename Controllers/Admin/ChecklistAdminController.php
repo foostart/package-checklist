@@ -18,8 +18,8 @@ use URL,
     Redirect;
 use Illuminate\Support\Facades\App;
 use Foostart\Category\Library\Controllers\FooController;
-use Foostart\Checklist\Models\Task;
-use Foostart\Checklist\Models\CheckedRule;
+use Foostart\Checklist\Models\Check;
+use Foostart\Checklist\Models\Checklist;
 use Foostart\Category\Models\Category;
 use Foostart\Checklist\Validators\ChecklistValidator;
 use Foostart\Checklist\Helper\PexcelParser;
@@ -39,12 +39,12 @@ class ChecklistAdminController extends FooController {
 
         parent::__construct();
         // models
-        $this->obj_rules = new Task(array('perPage' => 10));
-        $this->obj_checked_rules = new CheckedRule();
-        $this->obj_rule = new Task();
-        $this->obj_task = new Task();
+        $this->obj_rules = new Check(array('perPage' => 10));
+        $this->obj_checked_rules = new Checklist();
+        $this->obj_rule = new Check();
+        $this->obj_task = new Check();
         $this->obj_category = new Category();
-        $this->obj_item = new Task();
+        $this->obj_item = new Check();
         //statuses
         $this->statuses = config('package-checklist.status.list');
         // validators
@@ -500,7 +500,7 @@ class ChecklistAdminController extends FooController {
 
         //get checked rules by selected task
         if (!empty($params['id'])) {
-            $checked_rules = $this->obj_checked_rules->getCheckedRules($task->task_id);
+            $checked_rules = $this->obj_checked_rules->getChecklists($task->task_id);
         }
 
         //get categories by context
@@ -562,7 +562,7 @@ class ChecklistAdminController extends FooController {
 
         //Get checked rules by current task
         if ($user && $task) {
-            $checked_rules = $this->obj_checked_rules->getCheckedRules($task->task_id);
+            $checked_rules = $this->obj_checked_rules->getChecklists($task->task_id);
 
             if (empty($checked_rules)) {
                 return Redirect::route('home');
@@ -574,7 +574,7 @@ class ChecklistAdminController extends FooController {
 
     }
 
-    public function deleteTaskRule(Request $request) {
+    public function deleteCheckRule(Request $request) {
 
         $flag = TRUE;
         $params = array_merge($request->all(), $this->getUser());

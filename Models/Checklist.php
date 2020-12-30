@@ -5,7 +5,7 @@ namespace Foostart\Checklist\Models;
 use Foostart\Category\Library\Models\FooModel;
 use Illuminate\Database\Eloquent\Model;
 
-class CheckedRule extends FooModel {
+class Checklist extends FooModel {
 
     /**
      * @table categories
@@ -25,24 +25,24 @@ class CheckedRule extends FooModel {
 
         //list of field in table
         $this->fillable = [
-            'checked_rule_id',
-            'post_id',
-            'task_id',
-            'checked_rule_status',
+            'checklist_id',
+            'check_id',
+            'context_id',
+            'context_task'
         ];
 
         //list of fields for inserting
         $this->fields = [
-            'checked_rule_status' => [
+            'checklist_status' => [
                 'name' => 'checked_rule_status',
                 'type' => 'Int',
             ],
-            'task_id' => [
-                'name' => 'task_id',
+            'check_id' => [
+                'name' => 'check_id',
                 'type' => 'Int',
             ],
-             'post_id' => [
-                'name' => 'post_id',
+             'context_id' => [
+                'name' => 'context_id',
                 'type' => 'Int',
             ],
 
@@ -50,14 +50,16 @@ class CheckedRule extends FooModel {
 
         //check valid fields for inserting
         $this->valid_insert_fields = [
-            'checked_rule_status',
-            'task_id',
-            'post_id',
+            'checklist_status',
+            'check_id',
+            'user_id',
+            'context_id',
+            'context_type'
         ];
 
         //check valid fields for ordering
         $this->valid_ordering_fields = [
-            'post_id',
+            'check_id',
             'updated_at',
             $this->field_status,
         ];
@@ -65,18 +67,18 @@ class CheckedRule extends FooModel {
         $this->valid_filter_fields = [
             'keyword',
             'status',
-            'task_id',
-            'post_id',
+            'check_id',
+            'context_id',
         ];
 
         //primary key
-        $this->primaryKey = 'checked_rule_id';
+        $this->primaryKey = 'checklist_id';
 
         //the number of items on page
         $this->perPage = 10;
 
         //item status
-        $this->field_status = 'checked_rule_status';
+        $this->field_status = 'checklist_status';
     }
 
     /**
@@ -161,14 +163,19 @@ class CheckedRule extends FooModel {
                                 $elo = $elo->where($this->table . '.checklist_name', '=', $value);
                             }
                             break;
-                        case 'task_id':
+                        case 'check_id':
                             if (!empty($value)) {
-                                $elo = $elo->where($this->table . '.task_id', '=', $value);
+                                $elo = $elo->where($this->table . '.check_id', '=', $value);
                             }
                             break;
-                        case 'post_id':
+                        case 'context_id':
                             if (!empty($value)) {
-                                $elo = $elo->where($this->table . '.post_id', '=', $value);
+                                $elo = $elo->where($this->table . '.context_id', '=', $value);
+                            }
+                            break;
+                        case 'context_type':
+                            if (!empty($value)) {
+                                $elo = $elo->where($this->table . '.context_type', '=', $value);
                             }
                             break;
                         case 'status':
@@ -202,7 +209,7 @@ class CheckedRule extends FooModel {
      */
     public function createSelect($elo) {
 
-        $elo = $elo->select($this->table . '.*', $this->table . '.task_id as id'
+        $elo = $elo->select($this->table . '.*', $this->table . '.checklist_id as id'
         );
 
         return $elo;
@@ -260,8 +267,9 @@ class CheckedRule extends FooModel {
 
 
         $_params = [
-            'task_id' => $params['task_id'],
-            'post_id' => $params['post_id'],
+            'check_id' => $params['check_id'],
+            'context_id' => $params['context_id'],
+            'context_type' => $params['context_type'],
         ];
 
         $item = $this->selectItem($_params);
@@ -294,8 +302,9 @@ class CheckedRule extends FooModel {
          * $_params
          */
         $_params = [
-            'task_id' => $input['task_id'],
-            'post_id' => $input['post_id'],
+            'check_id' => $params['check_id'],
+            'context_id' => $params['context_id'],
+            'context_type' => $params['context_type'],
         ];
 
         $item = $this->selectItem($_params);
@@ -326,13 +335,13 @@ class CheckedRule extends FooModel {
      }
 
 
-     public function getCheckedRules($task_id) {
+     public function getChecklists($task_id) {
          $checked_rules = NULL;
 
-         $checked_rules = self::from('checked_rules')
+         $checked_rules = self::from('checklist')
                                 ->select('posts.*')
                                 ->join('posts','posts.post_id', '=', 'checked_rules.post_id')
-                                ->where('task_id','=', $task_id)
+                                ->where('check_id','=', $task_id)
                                 ->get();
          return $checked_rules;
      }
