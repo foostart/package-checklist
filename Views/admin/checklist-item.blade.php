@@ -117,12 +117,12 @@ $counter = ($nav['current_page'] - 1) * $nav['per_page'] + 1;
             </td>
 
             <!--NAME-->
-            <td> {!! $item->task_name !!} </td>
+            <td> {!! $item->check_name !!} </td>
 
             <!--TASK ID-->
             <td>
-                <a href="{!! $item->task_url  !!}">
-                    {!! $item->task_id !!}
+                <a href="{!! $item->check_url  !!}">
+                    {!! $item->check_id !!}
                 </a>
             </td>
 
@@ -130,8 +130,8 @@ $counter = ($nav['current_page'] - 1) * $nav['per_page'] + 1;
             <td style="text-align: center;">
 
                 <?php $status = config('package-checklist.status'); ?>
-                @if($item->task_status && (isset($status['list'][$item->task_status])))
-                    <i class="fa fa-circle" style="color:{!! $status['color'][$item->task_status] !!}" title='{!! $status["list"][$item->task_status] !!}'></i>
+                @if($item->check_status && (isset($status['list'][$item->check_status])))
+                    <i class="fa fa-circle" style="color:{!! $status['color'][$item->check_status] !!}" title='{!! $status["list"][$item->check_status] !!}'></i>
                @else
                 <i class="fa fa-circle-o red" title='{!! trans($plang_admin.".labels.unknown") !!}'></i>
                 @endif

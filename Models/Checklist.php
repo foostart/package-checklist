@@ -5,23 +5,26 @@ namespace Foostart\Checklist\Models;
 use Foostart\Category\Library\Models\FooModel;
 use Illuminate\Database\Eloquent\Model;
 
-class Checklist extends FooModel {
+class Checklist extends FooModel
+{
 
     /**
      * @table categories
      * @param array $attributes
      */
-    public function __construct(array $attributes = array()) {
+    public function __construct(array $attributes = array())
+    {
         //set configurations
         $this->setConfigs();
 
         parent::__construct($attributes);
     }
 
-    public function setConfigs() {
+    public function setConfigs()
+    {
 
         //table name
-        $this->table = 'checked_rules';
+        $this->table = 'checklists';
 
         //list of field in table
         $this->fillable = [
@@ -41,7 +44,7 @@ class Checklist extends FooModel {
                 'name' => 'check_id',
                 'type' => 'Int',
             ],
-             'context_id' => [
+            'context_id' => [
                 'name' => 'context_id',
                 'type' => 'Int',
             ],
@@ -86,7 +89,8 @@ class Checklist extends FooModel {
      * @param type $params
      * @return object list of categories
      */
-    public function selectItems($params = array()) {
+    public function selectItems($params = array())
+    {
 
         //join to another tables
         $elo = $this->joinTable();
@@ -111,7 +115,8 @@ class Checklist extends FooModel {
      * @param ARRAY $params list of parameters
      * @return OBJECT checklist
      */
-    public function selectItem($params = array(), $key = NULL) {
+    public function selectItem($params = array(), $key = NULL)
+    {
 
 
         if (empty($key)) {
@@ -142,7 +147,8 @@ class Checklist extends FooModel {
      * @param ARRAY $params list of parameters
      * @return ELOQUENT OBJECT
      */
-    protected function joinTable(array $params = []) {
+    protected function joinTable(array $params = [])
+    {
         return $this;
     }
 
@@ -151,7 +157,8 @@ class Checklist extends FooModel {
      * @param ARRAY $params list of parameters
      * @return ELOQUENT OBJECT
      */
-    protected function searchFilters(array $params = [], $elo, $by_status = TRUE) {
+    protected function searchFilters(array $params = [], $elo, $by_status = TRUE)
+    {
 
         //filter
         if ($this->isValidFilters($params) && (!empty($params))) {
@@ -185,10 +192,10 @@ class Checklist extends FooModel {
                             break;
                         case 'keyword':
                             if (!empty($value)) {
-                                $elo = $elo->where(function($elo) use ($value) {
+                                $elo = $elo->where(function ($elo) use ($value) {
                                     $elo->where($this->table . '.checklist_name', 'LIKE', "%{$value}%")
-                                            ->orWhere($this->table . '.checklist_description', 'LIKE', "%{$value}%")
-                                            ->orWhere($this->table . '.checklist_overview', 'LIKE', "%{$value}%");
+                                        ->orWhere($this->table . '.checklist_description', 'LIKE', "%{$value}%")
+                                        ->orWhere($this->table . '.checklist_overview', 'LIKE', "%{$value}%");
                                 });
                             }
                             break;
@@ -207,9 +214,12 @@ class Checklist extends FooModel {
      * @param ELOQUENT OBJECT
      * @return ELOQUENT OBJECT
      */
-    public function createSelect($elo) {
+    public function createSelect($elo)
+    {
 
-        $elo = $elo->select($this->table . '.*', $this->table . '.checklist_id as id'
+        $elo = $elo->select(
+            $this->table . '.*',
+            $this->table . '.checklist_id as id'
         );
 
         return $elo;
@@ -220,7 +230,8 @@ class Checklist extends FooModel {
      * @param ARRAY $params list of parameters
      * @return ELOQUENT OBJECT
      */
-    public function paginateItems(array $params = [], $elo) {
+    public function paginateItems(array $params = [], $elo)
+    {
         $items = $elo->paginate($this->perPage);
 
         return $items;
@@ -232,7 +243,8 @@ class Checklist extends FooModel {
      * @param INT $id is primary key
      * @return type
      */
-    public function updateItem($params = [], $id = NULL) {
+    public function updateItem($params = [], $id = NULL)
+    {
 
         if (empty($id)) {
             $id = $params['id'];
@@ -263,7 +275,8 @@ class Checklist extends FooModel {
      * @param ARRAY $params list of parameters
      * @return OBJECT checklist
      */
-    public function insertItem($params = []) {
+    public function insertItem($params = [])
+    {
 
 
         $_params = [
@@ -296,7 +309,8 @@ class Checklist extends FooModel {
      * @param ARRAY $input list of parameters
      * @return boolean TRUE incase delete successfully otherwise return FALSE
      */
-    public function deleteItem($input = [], $delete_type) {
+    public function deleteItem($input = [], $delete_type)
+    {
 
         /**
          * $_params
@@ -329,20 +343,22 @@ class Checklist extends FooModel {
      * @return ARRAY list of statuses
      */
 
-     public function getPluckStatus() {
-            $pluck_status = config('package-checklist.status.list');
-            return $pluck_status;
-     }
+    public function getPluckStatus()
+    {
+        $pluck_status = config('package-checklist.status.list');
+        return $pluck_status;
+    }
 
 
-     public function getChecklists($task_id) {
-         $checked_rules = NULL;
+    public function getChecklists($check_id)
+    {
+        $checked_rules = NULL;
 
-         $checked_rules = self::from('checklist')
-                                ->select('posts.*')
-                                ->join('posts','posts.post_id', '=', 'checked_rules.post_id')
-                                ->where('check_id','=', $task_id)
-                                ->get();
-         return $checked_rules;
-     }
+        $checked_rules = self::from('checks')
+            ->select('checks.*')
+            ->join('checklists', 'checks.check_id', '=', 'checklists.check_id')
+            ->where('checks.check_id', '=', $check_id)
+            ->get();
+        return $checked_rules;
+    }
 }

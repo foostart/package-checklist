@@ -138,6 +138,21 @@ Route::group(['middleware' => ['web']], function () {
             'as' => 'checklists.lang',
             'uses' => 'ChecklistAdminController@lang'
         ]);
+        Route::get('admin/rule/view', [
+            'as' => 'checkrule.view',
+            'uses' => 'ChecklistAdminController@view'
+        ]);
+        Route::get('admin/checkrule/delete', [
+            'as' => 'checkrule.delete',
+            'uses' => 'ChecklistAdminController@deleteCheckRule'
+        ]);
 
+        /**
+         * Checked
+         */
+        Route::get('admin/checkrule/checked', [
+            'as' => 'checkrule.checked',
+            'uses' => 'ChecklistAdminController@checked'
+        ]);
     });
 });

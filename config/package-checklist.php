@@ -3,15 +3,15 @@ return [
 
     //Number of worlds
     'length' => [
-        'task_name' => [
+        'check_name' => [
             'min' => 3,
             'max' => 255,
         ],
-        'task_overview' => [
+        'check_overview' => [
             'min' => 10,
             'max' => 255,
         ],
-        'task_description' => [
+        'check_description' => [
             'min' => 25,
             'max' => 0,//unlimit
         ],

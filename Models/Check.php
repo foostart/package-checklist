@@ -349,10 +349,10 @@ class Check extends FooModel {
      public function getChecklists($check_id) {
          $checked_rules = NULL;
 
-         $checked_rules = self::from('checked_rules')
-                                ->select('posts.*')
-                                ->join('posts','posts.post_id', '=', 'checked_rules.post_id')
-                                ->where('check_id','=', $check_id)
+         $checked_rules = self::from('checks')
+                                ->select('checks.*')
+                                ->join('checks','checks.check_id', '=', 'checklists.check_id')
+                                ->where('checks.check_id','=', $check_id)
                                 ->get();
          return $checked_rules;
      }

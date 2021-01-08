@@ -6,7 +6,6 @@ $withs = [
     'updated_at' => '25%',
     'operations' => '20%',
 ];
-
 $counter = 1;
 ?>
 <caption>
@@ -23,22 +22,22 @@ $counter = 1;
         <tr style="height: 50px;">
 
             <!--ORDER-->
-            <th style='width:{{ $withs['order'] }}'>
+            <th style="width:{{ $withs['order'] }}">
                 {{ trans($plang_admin.'.columns.order') }}
             </th>
 
             <!-- RULE NAME -->
-            <th style='width:{{ $withs['rule_name'] }}'>
+            <th style="width:{{ $withs['rule_name'] }}">
                 {{ trans($plang_admin.'.columns.rule_name') }}
             </th>
 
             <!--OPERATION-->
-            <th style='width:{{ $withs['operations'] }}'>
+            <th style="width:{{ $withs['operations'] }}">
                 {{ trans($plang_admin.'.columns.operations') }}
             </th>
 
             <!--UPDATED AT-->
-            <th style='width:{{ $withs['updated_at'] }}'>
+            <th style="width:{{ $withs['updated_at'] }}">
                 {{ trans($plang_admin.'.columns.updated_at') }}
             </th>
 
@@ -48,29 +47,30 @@ $counter = 1;
 
     <tbody>
         @foreach($checked_rules as $item)
+
         <tr>
             <!--ORDER-->
-            <td> <?php echo $counter;  $counter++; ?> </td>
+            <td> <?php echo $counter;
+                    $counter++; ?> </td>
 
             <!--POST NAME-->
-            <td>{!! $item->post_name !!}</td>
+            <td>{!! $item->check_name !!}</td>
 
             <!--OPERATION-->
             <td>
                 <!--view-->
-                <a href="{!! Url::route('rule', [$item->post_slug, $item->post_id]) !!}" target="_blank">
-                   <i class="fa fa-eye" aria-hidden="true"></i>
+                <a href="{!! Url::route('checkrule.view', [$item->check_slug, $item->check_id]) !!}" target="_blank">
+                    <i class="fa fa-eye" aria-hidden="true"></i>
                 </a>
 
                 <!--delete-->
-                <a href="{!! URL::route('taskrule.delete',[
+                <a href="{!! URL::route('checkrule.delete',[
                     'post_id' => $item->post_id,
-                    'task_id' => $task->task_id,
+                    'check_id' => $check->check_id,
                     'checked_rule_id' => $item->checked_rule_id,
                    '_token' => csrf_token(),
                    ])
-                   !!}"
-                   class="margin-left-5 delete">
+                   !!}" class="margin-left-5 delete">
                     <i class="fa fa-trash-o f-tb-icon"></i>
                 </a>
             </td>
@@ -101,5 +101,5 @@ $counter = 1;
 
 @section('footer_scripts')
 @parent
-{!! HTML::script('packages/foostart/js/form-table.js')  !!}
+{!! HTML::script('packages/foostart/js/form-table.js') !!}
 @stop

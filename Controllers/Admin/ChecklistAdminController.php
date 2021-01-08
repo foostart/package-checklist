@@ -24,25 +24,27 @@ use Foostart\Category\Models\Category;
 use Foostart\Checklist\Validators\ChecklistValidator;
 use Foostart\Checklist\Helper\PexcelParser;
 
-class ChecklistAdminController extends FooController {
+class ChecklistAdminController extends FooController
+{
 
     public $obj_rules = NULL;
     public $obj_checked_rules = NULL;
     public $obj_rule = NULL;
-    public $obj_task = NULL;
+    public $obj_check = NULL;
     public $obj_category = NULL;
     public $statuses = NULL;
 
     public $obj_item = NULL;
 
-    public function __construct() {
+    public function __construct()
+    {
 
         parent::__construct();
         // models
         $this->obj_rules = new Check(array('perPage' => 10));
         $this->obj_checked_rules = new Checklist();
         $this->obj_rule = new Check();
-        $this->obj_task = new Check();
+        $this->obj_check = new Check();
         $this->obj_category = new Category();
         $this->obj_item = new Check();
         //statuses
@@ -78,7 +80,7 @@ class ChecklistAdminController extends FooController {
         $this->statuses = config('package-checklist.status.list');
         // //set category
         $this->category_ref_name = 'admin/checklists';
-        
+
         /**
          * Breadcrumb
          */
@@ -91,12 +93,13 @@ class ChecklistAdminController extends FooController {
      * @return view list of items
      * @date 27/12/2017
      */
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         /**
          * Breadcrumb
          */
         $this->breadcrumb_3 = NULL;
-        
+
         //params
         $params = array_merge($request->all(), $this->getUser());
 
@@ -123,8 +126,9 @@ class ChecklistAdminController extends FooController {
      * @return view edit page
      * @date 26/12/2017
      */
-    public function edit(Request $request) {
-        
+    public function edit(Request $request)
+    {
+
         /**
          * Breadcrumb
          */
@@ -144,7 +148,7 @@ class ChecklistAdminController extends FooController {
 
             if (empty($item)) {
                 return Redirect::route($this->root_router . '.list')
-                                ->withMessage(trans($this->plang_admin . '.actions.edit-error'));
+                    ->withMessage(trans($this->plang_admin . '.actions.edit-error'));
             }
         }
 
@@ -174,7 +178,8 @@ class ChecklistAdminController extends FooController {
      * @return view edit page
      * @date 27/12/2017
      */
-    public function post(Request $request) {
+    public function post(Request $request)
+    {
 
         $item = NULL;
 
@@ -184,7 +189,7 @@ class ChecklistAdminController extends FooController {
 
         $id = (int) $request->get('id');
 
-        if ($is_valid_request && $this->obj_validator->validate($params)) {// valid data
+        if ($is_valid_request && $this->obj_validator->validate($params)) { // valid data
             // update existing item
             if (!empty($id)) {
 
@@ -198,12 +203,12 @@ class ChecklistAdminController extends FooController {
 
                     // message
                     return Redirect::route($this->root_router . '.edit', ["id" => $item->id])
-                                    ->withMessage(trans($this->plang_admin . '.actions.edit-ok'));
+                        ->withMessage(trans($this->plang_admin . '.actions.edit-ok'));
                 } else {
 
                     // message
                     return Redirect::route($this->root_router . '.list')
-                                    ->withMessage(trans($this->plang_admin . '.actions.edit-error'));
+                        ->withMessage(trans($this->plang_admin . '.actions.edit-error'));
                 }
 
                 // add new item
@@ -215,12 +220,12 @@ class ChecklistAdminController extends FooController {
 
                     //message
                     return Redirect::route($this->root_router . '.edit', ["id" => $item->id])
-                                    ->withMessage(trans($this->plang_admin . '.actions.add-ok'));
+                        ->withMessage(trans($this->plang_admin . '.actions.add-ok'));
                 } else {
 
                     //message
                     return Redirect::route($this->root_router . '.edit', ["id" => $item->id])
-                                    ->withMessage(trans($this->plang_admin . '.actions.add-error'));
+                        ->withMessage(trans($this->plang_admin . '.actions.add-error'));
                 }
             }
         } else { // invalid data
@@ -228,7 +233,7 @@ class ChecklistAdminController extends FooController {
 
             // passing the id incase fails editing an already existing item
             return Redirect::route($this->root_router . '.edit', $id ? ["id" => $id] : [])
-                            ->withInput()->withErrors($errors);
+                ->withInput()->withErrors($errors);
         }
     }
 
@@ -237,7 +242,8 @@ class ChecklistAdminController extends FooController {
      * @return view list of items
      * @date 27/12/2017
      */
-    public function delete(Request $request) {
+    public function delete(Request $request)
+    {
 
         $item = NULL;
         $flag = TRUE;
@@ -262,12 +268,12 @@ class ChecklistAdminController extends FooController {
             }
             if ($flag) {
                 return Redirect::route($this->root_router . '.list')
-                                ->withMessage(trans($this->plang_admin . '.actions.delete-ok'));
+                    ->withMessage(trans($this->plang_admin . '.actions.delete-ok'));
             }
         }
 
         return Redirect::route($this->root_router . '.list')
-                        ->withMessage(trans($this->plang_admin . '.actions.delete-error'));
+            ->withMessage(trans($this->plang_admin . '.actions.delete-error'));
     }
 
     /**
@@ -275,8 +281,9 @@ class ChecklistAdminController extends FooController {
      * @param Request $request
      * @return view config page
      */
-    public function config(Request $request) {
-        
+    public function config(Request $request)
+    {
+
         /**
          * Breadcrumb
          */
@@ -286,9 +293,9 @@ class ChecklistAdminController extends FooController {
         $config_path = realpath(base_path('config/package-checklist.php'));
         $package_path = realpath(base_path('vendor/foostart/package-checklist'));
 
-        $config_bakup = $package_path.'/storage/backup/config';
+        $config_bakup = $package_path . '/storage/backup/config';
         if (!file_exists($config_bakup)) {
-            mkdir($config_bakup, 0755    , true);
+            mkdir($config_bakup, 0755, true);
         }
         $config_bakup = realpath($config_bakup);
 
@@ -304,7 +311,7 @@ class ChecklistAdminController extends FooController {
         if ($request->isMethod('post') && $is_valid_request) {
 
             //create backup of current config
-            file_put_contents($config_bakup.'/package-checklist-'.date('YmdHis',time()).'.php', $content);
+            file_put_contents($config_bakup . '/package-checklist-' . date('YmdHis', time()) . '.php', $content);
 
             //update new config
             $content = $request->get('content');
@@ -312,7 +319,7 @@ class ChecklistAdminController extends FooController {
             file_put_contents($config_path, $content);
         }
 
-        $backups = array_reverse(glob($config_bakup.'/*'));
+        $backups = array_reverse(glob($config_bakup . '/*'));
 
         $this->data_view = array_merge($this->data_view, array(
             'request' => $request,
@@ -331,8 +338,9 @@ class ChecklistAdminController extends FooController {
      * @param Request $request
      * @return view lang page
      */
-    public function lang(Request $request) {
-                        
+    public function lang(Request $request)
+    {
+
         /**
          * Breadcrumb
          */
@@ -345,30 +353,29 @@ class ChecklistAdminController extends FooController {
 
         if (!empty($langs) && is_array($langs)) {
             foreach ($langs as $key => $value) {
-                $lang_paths[$key] = realpath(base_path('resources/lang/'.$key.'/checklist-admin.php'));
+                $lang_paths[$key] = realpath(base_path('resources/lang/' . $key . '/checklist-admin.php'));
 
-                $key_backup = $package_path.'/storage/backup/lang/'.$key;
+                $key_backup = $package_path . '/storage/backup/lang/' . $key;
 
                 if (!file_exists($key_backup)) {
-                    mkdir($key_backup, 0755    , true);
+                    mkdir($key_backup, 0755, true);
                 }
             }
         }
 
-        $lang_bakup = realpath($package_path.'/storage/backup/lang');
-        $lang = $request->get('lang')?$request->get('lang'):'en';
+        $lang_bakup = realpath($package_path . '/storage/backup/lang');
+        $lang = $request->get('lang') ? $request->get('lang') : 'en';
         $lang_contents = [];
 
         if ($version = $request->get('v')) {
             //load backup lang
             $group_backups = base64_decode($version);
-            $group_backups = empty($group_backups)?[]: explode(';', $group_backups);
+            $group_backups = empty($group_backups) ? [] : explode(';', $group_backups);
 
             foreach ($group_backups as $group_backup) {
                 $_backup = explode('=', $group_backup);
                 $lang_contents[$_backup[0]] = file_get_contents($_backup[1]);
             }
-
         } else {
             //load current lang
             foreach ($lang_paths as $key => $lang_path) {
@@ -383,7 +390,7 @@ class ChecklistAdminController extends FooController {
                 $content = file_get_contents($value);
 
                 //format file name category-admin-YmdHis.php
-                file_put_contents($lang_bakup.'/'.$key.'/checklist-admin-'.date('YmdHis',time()).'.php', $content);
+                file_put_contents($lang_bakup . '/' . $key . '/checklist-admin-' . date('YmdHis', time()) . '.php', $content);
             }
 
 
@@ -392,13 +399,12 @@ class ChecklistAdminController extends FooController {
                 $content = $request->get($key);
                 file_put_contents($lang_paths[$key], $content);
             }
-
         }
 
         //get list of backup langs
         $backups = [];
         foreach ($langs as $key => $value) {
-            $backups[$key] = array_reverse(glob($lang_bakup.'/'.$key.'/*'));
+            $backups[$key] = array_reverse(glob($lang_bakup . '/' . $key . '/*'));
         }
 
         $this->data_view = array_merge($this->data_view, array(
@@ -421,9 +427,10 @@ class ChecklistAdminController extends FooController {
      * @return view edit page
      * @date 26/12/2017
      */
-    public function copy(Request $request) {
-        
-                
+    public function copy(Request $request)
+    {
+
+
         /**
          * Breadcrumb
          */
@@ -442,7 +449,7 @@ class ChecklistAdminController extends FooController {
 
             if (empty($item)) {
                 return Redirect::route($this->root_router . '.list')
-                                ->withMessage(trans($this->plang_admin . '.actions.edit-error'));
+                    ->withMessage(trans($this->plang_admin . '.actions.edit-error'));
             }
 
             $item->id = NULL;
@@ -472,15 +479,16 @@ class ChecklistAdminController extends FooController {
      * Show list of checked rules
      * @param Request $request
      */
-    public function view(Request $request) {
-        
-                
+    public function view(Request $request)
+    {
+
+
         /**
          * Breadcrumb
          */
         $this->breadcrumb_3['label'] = 'View';
 
-        $task = NULL;
+        $check = NULL;
         $categories = NULL;
         $checked_rules = NULL;
 
@@ -490,17 +498,17 @@ class ChecklistAdminController extends FooController {
         //get task info
         if (!empty($params['id'])) {
 
-            $task = $this->obj_task->selectItem($params, FALSE);
+            $check = $this->obj_check->selectItem($params, FALSE);
 
-            if (empty($task)) {
+            if (empty($check)) {
                 return Redirect::route($this->root_router . '.list')
-                                ->withMessage(trans($this->plang_admin . '.actions.edit-error'));
+                    ->withMessage(trans($this->plang_admin . '.actions.edit-error'));
             }
         }
 
         //get checked rules by selected task
         if (!empty($params['id'])) {
-            $checked_rules = $this->obj_checked_rules->getChecklists($task->task_id);
+            $checked_rules = $this->obj_checked_rules->getChecklists($check->check_id);
         }
 
         //get categories by context
@@ -512,7 +520,7 @@ class ChecklistAdminController extends FooController {
 
         // display view
         $this->data_view = array_merge($this->data_view, array(
-            'task' => $task,
+            'check' => $check,
             'checked_rules' => $checked_rules,
             'categories' => $categories,
             'request' => $request,
@@ -530,16 +538,17 @@ class ChecklistAdminController extends FooController {
      * Download list of checked rules by current task
      * @param Request $request
      */
-    public function download(Request $request){
+    public function download(Request $request)
+    {
 
         //Pexcel parser
         $obj_parser = new PexcelParser();
 
-         //init
+        //init
         $user = $this->getUser();
 
         //Get checklist and taskrule
-        $task= NULL;
+        $task = NULL;
         $checked_rules = NULL;
 
 
@@ -550,7 +559,7 @@ class ChecklistAdminController extends FooController {
                 'status' => 99,
             ];
 
-            $task = $this->obj_task->selectItem($_params);
+            $task = $this->obj_check->selectItem($_params);
 
             if (empty($task)) {
                 return Redirect::route('home');
@@ -571,14 +580,14 @@ class ChecklistAdminController extends FooController {
 
         //write to excel
         $obj_parser->export_checklist($task, $checked_rules);
-
     }
 
-    public function deleteCheckRule(Request $request) {
+    public function deleteCheckRule(Request $request)
+    {
 
         $flag = TRUE;
         $params = array_merge($request->all(), $this->getUser());
-        $delete_type = isset($params['del-forever']) ? 'delete-forever' : 'delete-forever';//delete-trash
+        $delete_type = isset($params['del-forever']) ? 'delete-forever' : 'delete-forever'; //delete-trash
         $post_id = (int) $request->get('post_id');
         $task_id = (int) $request->get('task_id');
         $ids = $request->get('ids');
@@ -599,14 +608,15 @@ class ChecklistAdminController extends FooController {
             }
             if ($flag) {
                 return Redirect::route($this->root_router . '.view', ["id" => $task_id])
-                                ->withMessage(trans($this->plang_admin . '.actions.delete-ok'));
+                    ->withMessage(trans($this->plang_admin . '.actions.delete-ok'));
             }
         }
         return Redirect::route($this->root_router . '.view', ["id" => $task_id])
-                        ->withMessage(trans($this->plang_admin . '.actions.delete-error'));
+            ->withMessage(trans($this->plang_admin . '.actions.delete-error'));
     }
 
-    public function checked(Request $request) {
+    public function checked(Request $request)
+    {
 
         $params = $request->all();
 
@@ -616,7 +626,7 @@ class ChecklistAdminController extends FooController {
             if ($params['callback']) {
                 return redirect($params['callback']);
             } else {
-                 return redirect(url('/'));
+                return redirect(url('/'));
             }
         }
         return Redirect::route('home');

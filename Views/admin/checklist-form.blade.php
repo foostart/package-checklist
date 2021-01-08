@@ -54,9 +54,9 @@
 
             <!--checklist NAME-->
             @include('package-category::admin.partials.input_text', [
-                'name' => 'task_name',
+                'name' => 'check_name',
                 'label' => trans($plang_admin.'.labels.name'),
-                'value' => @$item->task_name,
+                'value' => @$item->check_name,
                 'description' => trans($plang_admin.'.descriptions.name'),
                 'errors' => $errors,
             ])
@@ -83,45 +83,45 @@
                 <div class='col-md-6'>
 
                     @include('package-category::admin.partials.radio', [
-                        'name' => 'task_status',
+                        'name' => 'check_status',
                         'label' => trans($plang_admin.'.labels.checklist-status'),
-                        'value' => @$item->task_status,
+                        'value' => @$item->check_status,
                         'description' => trans($plang_admin.'.descriptions.checklist-status'),
                         'items' => $statuses,
                     ])
                 </div>
                 <!--/STATUS-->
 
-                <!--TASK_ID-->
+                <!--check_ID-->
                 <div class='col-md-6'>
                     @include('package-category::admin.partials.input_text', [
                         'name' => 'redmine_id',
-                        'label' => trans($plang_admin.'.labels.task_id'),
-                        'value' => @$item->task_id,
-                        'description' => trans($plang_admin.'.descriptions.task_id'),
+                        'label' => trans($plang_admin.'.labels.check_id'),
+                        'value' => @$item->check_id,
+                        'description' => trans($plang_admin.'.descriptions.check_id'),
                         'errors' => $errors,
                     ])
                 </div>
-                <!--/TASK_ID-->
+                <!--/check_ID-->
 
-                <!--TASK_URL-->
+                <!--check_URL-->
                 <div class='col-md-6'>
                     @include('package-category::admin.partials.input_text', [
                         'name' => 'redmine_url',
-                        'label' => trans($plang_admin.'.labels.task_url'),
+                        'label' => trans($plang_admin.'.labels.check_url'),
                         'value' => @$item->redmine_url,
-                        'description' => trans($plang_admin.'.descriptions.task_url'),
+                        'description' => trans($plang_admin.'.descriptions.check_url'),
                         'errors' => $errors,
                     ])
                 </div>
-                <!--/TASK_URL-->
+                <!--/check_URL-->
 
             </div>
              <!--checklist FILES-->
             @include('package-category::admin.partials.input_files', [
                 'name' => 'files',
                 'label' => trans($plang_admin.'.labels.files'),
-                'value' => @$item->task_files,
+                'value' => @$item->check_files,
                 'description' => trans($plang_admin.'.descriptions.files'),
                 'errors' => $errors,
             ])
@@ -133,9 +133,9 @@
             <div class="row">
             <!--checklist OVERVIEW-->
             @include('package-category::admin.partials.textarea', [
-                'name' => 'task_overview',
+                'name' => 'check_overview',
                 'label' => trans($plang_admin.'.labels.overview'),
-                'value' => @$item->task_overview,
+                'value' => @$item->check_overview,
                 'description' => trans($plang_admin.'.descriptions.overview'),
                 'tinymce' => false,
                 'errors' => $errors,
@@ -144,9 +144,9 @@
 
             <!--checklist DESCRIPTION-->
             @include('package-category::admin.partials.textarea', [
-                'name' => 'task_description',
+                'name' => 'check_description',
                 'label' => trans($plang_admin.'.labels.description'),
-                'value' => @$item->task_description,
+                'value' => @$item->check_description,
                 'description' => trans($plang_admin.'.descriptions.description'),
                 'rows' => 50,
                 'tinymce' => true,
@@ -161,9 +161,9 @@
             <div class="row">
             <!--checklist IMAGE-->
             @include('package-category::admin.partials.input_image', [
-                'name' => 'task_image',
+                'name' => 'check_image',
                 'label' => trans($plang_admin.'.labels.image'),
-                'value' => @$item->task_image,
+                'value' => @$item->check_image,
                 'description' => trans($plang_admin.'.descriptions.image'),
                 'errors' => $errors,
                 'lfm_config' => false,

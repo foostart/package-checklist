@@ -16,9 +16,9 @@ class ChecklistValidator extends FooValidator
     {
         // add rules
         self::$rules = [
-            'task_name' => ["required"],
-            'task_overview' => ["required"],
-            'task_description' => ["required"],
+            'check_name' => ["required"],
+            'check_overview' => ["required"],
+            'check_description' => ["required"],
         ];
 
         // set configs
@@ -35,9 +35,9 @@ class ChecklistValidator extends FooValidator
         Event::listen('validating', function($input)
         {
             self::$messages = [
-                'task_name.required'          => trans($this->lang_admin.'.errors.required', ['attribute' => trans($this->lang_admin.'.fields.name')]),
-                'task_overview.required'      => trans($this->lang_admin.'.errors.required', ['attribute' => trans($this->lang_admin.'.fields.overview')]),
-                'task_description.required'   => trans($this->lang_admin.'.errors.required', ['attribute' => trans($this->lang_admin.'.fields.description')]),
+                'check_name.required'          => trans($this->lang_admin.'.errors.required', ['attribute' => trans($this->lang_admin.'.fields.name')]),
+                'check_overview.required'      => trans($this->lang_admin.'.errors.required', ['attribute' => trans($this->lang_admin.'.fields.overview')]),
+                'check_description.required'   => trans($this->lang_admin.'.errors.required', ['attribute' => trans($this->lang_admin.'.fields.description')]),
             ];
         });
 
@@ -59,28 +59,28 @@ class ChecklistValidator extends FooValidator
 
         $params = [
             'name' => [
-                'key' => 'task_name',
+                'key' => 'check_name',
                 'label' => trans($this->lang_admin.'.fields.name'),
-                'min' => $_ln['task_name']['min'],
-                'max' => $_ln['task_name']['max'],
+                'min' => $_ln['check_name']['min'],
+                'max' => $_ln['check_name']['max'],
             ],
             'overview' => [
-                'key' => 'task_overview',
+                'key' => 'check_overview',
                 'label' => trans($this->lang_admin.'.fields.overview'),
-                'min' => $_ln['task_overview']['min'],
-                'max' => $_ln['task_overview']['max'],
+                'min' => $_ln['check_overview']['min'],
+                'max' => $_ln['check_overview']['max'],
             ],
             'description' => [
-                'key' => 'task_description',
+                'key' => 'check_description',
                 'label' => trans($this->lang_admin.'.fields.description'),
-                'min' => $_ln['task_description']['min'],
-                'max' => $_ln['task_description']['max'],
+                'min' => $_ln['check_description']['min'],
+                'max' => $_ln['check_description']['max'],
             ],
         ];
 
-        $flag = $this->isValidLength($input['task_name'], $params['name']) ? $flag : FALSE;
-        $flag = $this->isValidLength($input['task_overview'], $params['overview']) ? $flag : FALSE;
-        $flag = $this->isValidLength($input['task_description'], $params['description']) ? $flag : FALSE;
+        $flag = $this->isValidLength($input['check_name'], $params['name']) ? $flag : FALSE;
+        $flag = $this->isValidLength($input['check_overview'], $params['overview']) ? $flag : FALSE;
+        $flag = $this->isValidLength($input['check_description'], $params['description']) ? $flag : FALSE;
 
         return $flag;
     }
